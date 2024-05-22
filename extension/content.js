@@ -1,35 +1,32 @@
-console.log("Content script loaded");
+// content.js
 
-// Inject the injected.js script into the web page
-const script = document.createElement('script');
-script.src = chrome.runtime.getURL('injected.js');
-script.onload = () => {
-    script.remove();
-};
-(document.head || document.documentElement).appendChild(script);
+console.log("Content script running");
 
-// Listen for messages from the injected script
-window.addEventListener('message', (event) => {
-    if (event.source !== window) return;
+function injectScript(file, node) {
+    var th = document.getElementsByTagName(node)[0];
+    var s = document.createElement('script');
+    s.setAttribute('type', 'text/javascript');
+    s.setAttribute('src', file);
+    th.appendChild(s);
+}
 
-    if (event.data.type && event.data.type === 'SOLFLARE_STATUS') {
-        console.log("Received message from injected script:", event.data);
-        chrome.runtime.sendMessage(event.data);
-    }
-});
+injectScript(chrome.runtime.getURL('injected.js'), 'body');
 
-// Listen for messages from the background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'CONNECT_WALLET') {
-        console.log("CONNECT_WALLET message received in content script");
-        window.postMessage({ type: 'CONNECT_WALLET' }, '*');
-        window.addEventListener('message', (event) => {
-            if (event.source !== window) return;
+    console.log("Received message in content script:", message);
 
-            if (event.data.type && event.data.type === 'SOLFLARE_STATUS') {
+    if (message.type === 'CONNECT_WALLET') {
+        console.log("Forwarding message to injected script");
+        window.postMessage({ type: 'CONNECT_WALLET' }, '*');
+
+        window.addEventListener('message', function handler(event) {
+            if (event.data.type === 'SOLFLARE_STATUS') {
+                console.log("SOLFLARE_STATUS message received in content script:", event.data);
                 sendResponse(event.data);
+                window.removeEventListener('message', handler);
             }
         });
-        return true; // Indicate that the response will be sent asynchronously
+
+        return true;  // Indicate that the response will be sent asynchronously
     }
 });
