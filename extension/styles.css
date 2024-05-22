@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    width: 400px;
+    height: 600px;
+}
+
 .btm-nav {
     position: fixed;
     bottom: 0;

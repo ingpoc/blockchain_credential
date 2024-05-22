@@ -5,9 +5,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     background: './extension/background.js',
-    popup: './extension/popup.js',
+    connect: './extension/connect.js',
     content: './extension/content.js',
     injected: './extension/injected.js',
+    credentials: './extension/credentials.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -54,11 +55,12 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'extension/popup.html', to: 'popup.html' },
-        { from: 'extension/popup.css', to: 'popup.css' },
+        { from: 'extension/connect.html', to: 'connect.html' },
+        { from: 'extension/credentials.html', to: 'credentials.html' },
         { from: 'extension/manifest.json', to: 'manifest.json' },
         { from: 'extension/icons', to: 'icons' },
         { from: 'extension/tailwind.css', to: 'tailwind.css' },
+        { from: 'extension/styles.css', to: 'styles.css' },
       ],
     }),
   ]
