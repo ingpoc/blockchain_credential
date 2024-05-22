@@ -26,10 +26,15 @@ body {
     align-items: center;
     justify-content: center;
     color: #ccc;
+    flex: 1;  /* Ensure buttons are evenly spaced */
+    border: none;  /* Remove default button border */
+    background: none;  /* Remove default button background */
+    padding: 10px 0;  /* Adjust padding */
 }
 
 .btm-nav button:hover {
     color: #fff;
+    cursor: pointer;  /* Change cursor on hover */
 }
 
 .btm-nav svg {

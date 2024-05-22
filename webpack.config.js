@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
 module.exports = {
   entry: {
@@ -59,9 +60,15 @@ module.exports = {
         { from: 'extension/credentials.html', to: 'credentials.html' },
         { from: 'extension/manifest.json', to: 'manifest.json' },
         { from: 'extension/icons', to: 'icons' },
-        { from: 'extension/tailwind.css', to: 'tailwind.css' },
-        { from: 'extension/styles.css', to: 'styles.css' },
+        { from: 'extension/tailwind.css', to: 'tailwind.css' }
       ],
     }),
+    new WebpackShellPluginNext({
+      onBuildStart:{
+        scripts: ['npx tailwindcss -i ./extension/styles.css -o ./extension/tailwind.css'],
+        blocking: true,
+        parallel: false
+      }
+    })
   ]
 };

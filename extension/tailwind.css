@@ -1386,6 +1386,12 @@ details.collapse summary::-webkit-details-marker {
   color: var(--fallback-nc,oklch(var(--nc)/var(--tw-text-opacity)));
 }
 
+.mockup-phone .display {
+  overflow: hidden;
+  border-radius: 40px;
+  margin-top: -25px;
+}
+
 @keyframes modal-pop {
   0% {
     opacity: 0;
@@ -1549,6 +1555,10 @@ details.collapse summary::-webkit-details-marker {
   margin-bottom: 1rem;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -1591,6 +1601,11 @@ details.collapse summary::-webkit-details-marker {
 
 .justify-center {
   justify-content: center;
+}
+
+.rounded-b-lg {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
 }
 
 .border {
@@ -1648,14 +1663,25 @@ details.collapse summary::-webkit-details-marker {
   font-weight: 700;
 }
 
-.text-gray-500 {
+.text-gray-300 {
   --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
+  color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.shadow-lg {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .shadow-xl {
@@ -1688,10 +1714,20 @@ body {
   align-items: center;
   justify-content: center;
   color: #ccc;
+  flex: 1;
+  /* Ensure buttons are evenly spaced */
+  border: none;
+  /* Remove default button border */
+  background: none;
+  /* Remove default button background */
+  padding: 10px 0;
+  /* Adjust padding */
 }
 
 .btm-nav button:hover {
   color: #fff;
+  cursor: pointer;
+  /* Change cursor on hover */
 }
 
 .btm-nav svg {
