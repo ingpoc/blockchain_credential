@@ -1,7 +1,7 @@
 (function() {
     console.log("Injected script loaded");
 
-    function checkSolflareWallet() {
+    function connectSolflareWallet() {
         if (typeof window.solflare !== 'undefined' && window.solflare.isSolflare) {
             if (!window.solflare.isConnected) {
                 window.solflare.connect().then(() => {
@@ -27,10 +27,16 @@
         } else {
             window.postMessage({
                 type: 'SOLFLARE_STATUS',
-                status: 'not_found'
+                status: 'not_found',
+                message: 'Solflare wallet not found. Please install it.'
             }, '*');
         }
     }
 
-    checkSolflareWallet();
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'CONNECT_WALLET') {
+            console.log("CONNECT_WALLET message received in injected script");
+            connectSolflareWallet();
+        }
+    });
 })();
