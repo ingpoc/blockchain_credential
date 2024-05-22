@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.server.path": null,
+    "rust-analyzer.linkedProjects": [
+        "~/Projects/SolanadApp/blockchain_credential/anchor/blockchain_credential/Cargo.toml"
+      ]
+}
