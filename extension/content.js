@@ -1,3 +1,4 @@
+// content.js
 console.log("Content script running");
 
 function injectScript(file, node) {
@@ -41,5 +42,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         });
 
         return true;  // Indicate that the response will be sent asynchronously
+    }
+
+    if (message.type === 'GET_SITE_NAME') {
+        sendResponse({ siteName: window.location.hostname });
     }
 });

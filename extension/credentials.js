@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addButton = document.getElementById('addCredential');
   addButton.addEventListener('click', () => {
       console.log("Add credential button clicked");
-      addCredential();
+      fetchSiteName();
   });
 });
 
@@ -33,15 +33,49 @@ function loadCredentials() {
   });
 }
 
-function addCredential() {
-  // Placeholder function to add new credentials to the blockchain
-  const username = prompt("Enter username:");
-  const password = prompt("Enter password:");
-  
-  if (username && password) {
-      console.log("Adding new credential...");
-      const newCredential = { username, password };
-      chrome.runtime.sendMessage({ type: 'SAVE_CREDENTIAL', credential: newCredential }, (response) => {
+function fetchSiteName() {
+  chrome.runtime.sendMessage({ type: 'GET_SITE_NAME' }, (response) => {
+      if (response && response.siteName) {
+          showAddCredentialForm(response.siteName);
+      } else {
+          console.error("Failed to get site name");
+      }
+  });
+}
+
+function showAddCredentialForm(siteName) {
+  const formHtml = `
+      <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Site Name</label>
+          <input type="text" id="siteName" class="mt-1 block w-full" value="${siteName}">
+      </div>
+      <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Username</label>
+          <input type="text" id="username" class="mt-1 block w-full">
+      </div>
+      <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Password</label>
+          <input type="password" id="password" class="mt-1 block w-full">
+      </div>
+      <button id="saveCredential" class="btn btn-primary mt-4 w-full">Save Credential</button>
+  `;
+  const appDiv = document.getElementById('app');
+  appDiv.innerHTML = formHtml;
+
+  document.getElementById('saveCredential').addEventListener('click', () => {
+      saveCredential();
+  });
+}
+
+function saveCredential() {
+  const siteName = document.getElementById('siteName').value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  if (siteName && username && password) {
+      console.log("Encrypting and saving credential...");
+      const encryptedCredentials = encryptCredentials(username, password);
+      chrome.runtime.sendMessage({ type: 'SAVE_CREDENTIAL', siteName, credentials: encryptedCredentials }, (response) => {
           if (response.status === 'success') {
               loadCredentials();
           } else {
@@ -49,8 +83,14 @@ function addCredential() {
           }
       });
   } else {
-      console.log("Credential addition cancelled.");
+      console.error("All fields are required");
   }
+}
+
+function encryptCredentials(username, password) {
+  // Implement encryption logic here
+  // For now, we will just return the plain credentials as a placeholder
+  return { username, password };
 }
 
 function displayCredentials(credentials) {

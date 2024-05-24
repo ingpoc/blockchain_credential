@@ -1,3 +1,4 @@
+// background.js
 console.log("Background script running");
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -24,6 +25,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'CHECK_WALLET_CONNECTION') {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             chrome.tabs.sendMessage(tabs[0].id, { type: 'CHECK_WALLET_CONNECTION' }, (response) => {
+                if (chrome.runtime.lastError) {
+                    console.error("Runtime error:", chrome.runtime.lastError);
+                    sendResponse({
+                        status: 'failed',
+                        message: chrome.runtime.lastError.message
+                    });
+                } else {
+                    console.log("Response from content script:", response);
+                    sendResponse(response);
+                }
+            });
+        });
+        return true;  // Indicate that the response will be sent asynchronously
+    }
+
+    if (message.type === 'GET_SITE_NAME') {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { type: 'GET_SITE_NAME' }, (response) => {
                 if (chrome.runtime.lastError) {
                     console.error("Runtime error:", chrome.runtime.lastError);
                     sendResponse({
